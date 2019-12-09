@@ -7,6 +7,16 @@ use Illuminate\Contracts\Hashing\Hasher as HasherContract;
 class MD5Hasher implements HasherContract
 {
     /**
+     * Get information about the given hashed value.
+     *
+     * @param  string $hashedValue
+     * @return array
+     */
+    public function info($hashedValue)
+    {
+        return password_get_info($hashedValue);
+    }
+    /**
      * Hash the given value.
      *
      * @param  string $value

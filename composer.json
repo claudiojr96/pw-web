@@ -5,33 +5,37 @@
     "license": "MIT",
     "type": "project",
     "require": {
-        "php": ">=5.5.9",
-        "laravel/framework": "5.1.*",
-        "huludini/pw-api": "^1.0",
-        "laracasts/flash": "^1.3",
+        "php": "^7.2",
+        "davejamesmiller/laravel-breadcrumbs": "5.3.*",
+        "fideloper/proxy": "^4.2",
         "guzzlehttp/guzzle": "^6.1",
-        "efriandika/laravel-settings": "^1.0",
-        "illuminate/html": "^5.0",
-        "wadeshuler/php-paypal-ipn": "^2.5",
-        "davejamesmiller/laravel-breadcrumbs": "^3.0",
-        "rephlux/pagetitle": "^0.6.0",
-        "knplabs/github-api": "^1.5",
-        "graham-campbell/github": "^4.2",
-        "doctrine/dbal": "^2.5",
-        "laravolt/avatar": "~0.3",
-        "omnipay/omnipay": "^2.3",
-        "jenssegers/agent": "^2.3",
-        "paymentwall/paymentwall-php": "^2.1"
+        "laravel/framework": "6.2.*",
+        "laravel/tinker": "^2.0",
+        "laravolt/avatar": "3.0.*",
+        "symfony/css-selector": "~3.0",
+        "symfony/dom-crawler": "~3.0"
     },
     "require-dev": {
-        "fzaninotto/faker": "~1.4",
-        "mockery/mockery": "0.9.*",
-        "phpunit/phpunit": "~4.0",
-        "phpspec/phpspec": "~2.1"
+        "facade/ignition": "^1.4",
+        "fzaninotto/faker": "^1.4",
+        "mockery/mockery": "^1.0",
+        "nunomaduro/collision": "^3.0",
+        "phpunit/phpunit": "^8.0"
+    },
+    "config": {
+        "optimize-autoloader": true,
+        "preferred-install": "dist",
+        "sort-packages": true
+    },
+    "extra": {
+        "laravel": {
+            "dont-discover": []
+        }
     },
     "autoload": {
         "classmap": [
-            "database"
+            "database/seeds",
+            "database/factories"
         ],
         "psr-4": {
             "App\\": "app/"
@@ -41,29 +45,22 @@
         ]
     },
     "autoload-dev": {
-        "classmap": [
-            "tests/TestCase.php"
-        ]
+        "psr-4": {
+            "Tests\\": "tests/"
+        }
     },
+    "minimum-stability": "dev",
+    "prefer-stable": true,
     "scripts": {
-        "post-install-cmd": [
-            "php artisan clear-compiled",
-            "php artisan optimize"
-        ],
-        "pre-update-cmd": [
-            "php artisan clear-compiled"
-        ],
-        "post-update-cmd": [
-            "php artisan optimize"
+        "post-autoload-dump": [
+            "Illuminate\\Foundation\\ComposerScripts::postAutoloadDump",
+            "@php artisan package:discover --ansi"
         ],
         "post-root-package-install": [
-            "php -r \"copy('.env.example', '.env');\""
+            "@php -r \"file_exists('.env') || copy('.env.example', '.env');\""
         ],
         "post-create-project-cmd": [
-            "php artisan key:generate"
+            "@php artisan key:generate --ansi"
         ]
-    },
-    "config": {
-        "preferred-install": "dist"
     }
 }

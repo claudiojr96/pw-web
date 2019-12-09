@@ -12,10 +12,19 @@
 */
 
 /* Auth */
-Route::controller( 'auth', 'Auth\AuthController', [
+/*Route::controller( 'auth', 'Auth\AuthController', [
     'getRegister' => 'auth.register',
     'getLogin'    => 'auth.login',
-]);
+]);*/
+
+Route::group(['prefix' => 'auth'], function () {
+    Route::get('login', 'Auth\LoginController@showLoginForm');
+    Route::post('login', 'Auth\LoginController@login');
+    Route::get('logout', 'Auth\LoginController@logout');
+    Route::get('register', 'Auth\RegisterController@showRegistrationForm');
+    Route::post('register', 'Auth\RegisterController@register');
+});
+
 
 Route::get( 'account/settings', ['as' => 'account.settings', 'uses' => 'Front\AccountController@getSettings'] );
 Route::post( 'account/settings/email', 'Front\AccountController@postEmail' );
@@ -134,11 +143,11 @@ Route::group( ['prefix' => 'admin', 'middleware' => ['auth', 'admin'] ], functio
     Route::post( 'management/chat/logs', 'Admin\ManagementController@postChatLogs' );
     Route::get( 'management/chat/settings', ['as' => 'admin.management.chat.settings', 'uses' => 'Admin\ManagementController@getChatSettings'] );
     Route::post( 'management/chat/settings', 'Admin\ManagementController@postChatSettings' );
-    Route::controller( 'management', 'Admin\ManagementController', [
+   /* Route::controller( 'management', 'Admin\ManagementController', [
         'getBroadcast' => 'admin.management.broadcast',
         'getMailer' => 'admin.management.mailer',
         'getForbid' => 'admin.management.forbid'
-    ]);
+    ]);*/
 });
 
 /* Installer */
@@ -146,17 +155,17 @@ Route::group( ['prefix' => 'admin/install', 'as' => 'admin.installer.'], functio
 {
     Route::group( ['middleware' => 'installed'], function()
     {
-        get( '/', [
+        Route::get( '/', [
             'as' => 'welcome',
             'uses' => 'Admin\InstallController@welcome'
         ]);
 
-        get( 'settings', [
+        Route::get( 'settings', [
             'as' => 'settings',
             'uses' => 'Admin\InstallController@getSettings'
         ]);
 
-        post( 'setup', [
+        Route::post( 'setup', [
             'as' => 'settings.save',
             'uses' => 'Admin\InstallController@postSettings'
         ]);
@@ -186,7 +195,7 @@ Route::group( ['prefix' => 'admin/install', 'as' => 'admin.installer.'], functio
             'uses' => 'Admin\InstallController@database'
         ]);*/
 
-        get( 'complete', [
+        Route::get( 'complete', [
             'as' => 'complete',
             'uses' => 'Admin\InstallController@complete'
         ]);

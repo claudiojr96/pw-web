@@ -2,7 +2,10 @@
 
 namespace App\Providers;
 
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\ServiceProvider;
+use App\Application;
+use App\User;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -13,7 +16,19 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //
+        view()->composer( 'front.header', function ( $view ) {
+            $apps = Application::all();
+            $view->with( 'apps', $apps );
+        });
+
+        view()->composer( 'front.widgets', function ( $view ) {
+            $gms = [];
+            foreach ( DB::table( 'auth' )->select( 'userid' )->distinct()->get() as $gm )
+            {
+                $gms[] = User::find( $gm->userid );
+            }
+            $view->with( 'gms', $gms );
+        });
     }
 
     /**
